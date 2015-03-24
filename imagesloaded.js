@@ -55,6 +55,15 @@ function extend( a, b ) {
   return a;
 }
 
+// querySelectorAll
+function select( element, selector ) {
+  if ( $ ) {
+    return $( element ).find( selector );
+  } else {
+    return element.querySelectorAll( selector );
+  }
+}
+
 var objToString = Object.prototype.toString;
 function isArray( obj ) {
   return objToString.call( obj ) === '[object Array]';
@@ -92,7 +101,7 @@ function makeArray( obj ) {
     }
     // use elem as selector string
     if ( typeof elem === 'string' ) {
-      elem = document.querySelectorAll( elem );
+      elem = select( document, elem );
     }
 
     this.elements = makeArray( elem );
@@ -136,13 +145,13 @@ function makeArray( obj ) {
       if ( elem.nodeName === 'IMG' ) {
         this.addImage( elem );
       }
-      // find children
       // no non-element nodes, #143
       var nodeType = elem.nodeType;
       if ( !nodeType || !( nodeType === 1 || nodeType === 9 || nodeType === 11 ) ) {
         continue;
       }
-      var childElems = elem.querySelectorAll('img');
+      // find children
+      var childElems = select( elem, 'img' );
       // concat childElems to filterFound array
       for ( var j=0, jLen = childElems.length; j < jLen; j++ ) {
         var img = childElems[j];
